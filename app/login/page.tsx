@@ -4,21 +4,10 @@ import { useFormState } from 'react-dom';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import { logIn } from './actions';
-import {
-  EnvelopeIcon,
-  UserIcon,
-  LockClosedIcon,
-  CheckCircleIcon
-} from '@heroicons/react/24/solid';
-// import { PASSWORD_MIN_LENGTH, USERNAME_MIN_LENGTH } from '@/lib/constants';
-
-const initialState = {
-  success: false,
-  error: undefined
-};
+import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/solid';
 
 export default function Login() {
-  const [state, dispatch] = useFormState(logIn, initialState);
+  const [state, dispatch] = useFormState(logIn, null);
 
   return (
     <div className='flex flex-col gap-10 py-20 px-6'>
@@ -33,35 +22,19 @@ export default function Login() {
           placeholder='Email'
           icon={<EnvelopeIcon className='w-5 h-5 text-gray-400' />}
           required
-          errors={state.error?.email}
+          errors={state?.fieldErrors.email}
         />
-        <Input
-          name='username'
-          type='text'
-          placeholder='Username'
-          icon={<UserIcon className='w-5 h-5 text-gray-400' />}
-          required
-          // minLength={USERNAME_MIN_LENGTH}
-          errors={state.error?.username}
-        />
+
         <Input
           name='password'
           type='password'
           placeholder='Password'
           icon={<LockClosedIcon className='w-5 h-5 text-gray-400' />}
           required
-          // minLength={PASSWORD_MIN_LENGTH}
-          errors={state.error?.password}
+          errors={state?.fieldErrors.password}
         />
         <Button text='로그인' />
       </form>
-
-      {state.success && (
-        <div className='flex items-center gap-2 text-white bg-green-500 rounded-md p-4'>
-          <CheckCircleIcon className='w-6 h-6' />
-          로그인 성공
-        </div>
-      )}
     </div>
   );
 }
