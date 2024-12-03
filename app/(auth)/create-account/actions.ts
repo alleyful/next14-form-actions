@@ -52,27 +52,6 @@ const formSchema = z
       return z.NEVER;
     }
   })
-  .superRefine(async ({ username }, ctx) => {
-    const user = await db.user.findUnique({
-      where: {
-        username
-      },
-      select: {
-        id: true
-      }
-    });
-
-    if (user) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'Username already exists',
-        path: ['username'],
-        fatal: true
-      });
-
-      return z.NEVER;
-    }
-  })
   .refine(checkPasswords, {
     path: ['confirm_password'],
     message: 'Passwords do not match'
