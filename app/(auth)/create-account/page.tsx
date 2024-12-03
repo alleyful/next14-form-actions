@@ -9,6 +9,7 @@ import {
 } from '@heroicons/react/24/solid';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
+import Link from 'next/link';
 
 export default function CreateAccount() {
   const [state, dispatch] = useFormState(createAccount, null);
@@ -54,6 +55,13 @@ export default function CreateAccount() {
         />
         <Button text='회원가입' />
       </form>
+
+      <div className='flex gap-2 justify-center'>
+        <p className='text-sm text-gray-500'>Do you already have an account?</p>
+        <Link className='text-sm text-blue-500 underline' href='/login'>
+          Login
+        </Link>
+      </div>
     </div>
   );
 }

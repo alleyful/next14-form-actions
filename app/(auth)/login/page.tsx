@@ -5,6 +5,7 @@ import Button from '@/components/Button';
 import Input from '@/components/Input';
 import { logIn } from './actions';
 import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/solid';
+import Link from 'next/link';
 
 export default function Login() {
   const [state, dispatch] = useFormState(logIn, null);
@@ -35,6 +36,16 @@ export default function Login() {
         />
         <Button text='로그인' />
       </form>
+
+      <div className='flex gap-2 justify-center'>
+        <p className='text-sm text-gray-500'>Are you going to sign up?</p>
+        <Link
+          className='text-sm text-blue-500 underline'
+          href='/create-account'
+        >
+          Sign up
+        </Link>
+      </div>
     </div>
   );
 }

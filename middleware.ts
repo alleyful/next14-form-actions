@@ -6,7 +6,6 @@ interface PublicOnlyPaths {
 }
 
 const publicOnlyPaths: PublicOnlyPaths = {
-  '/': true,
   '/login': true,
   '/create-account': true
 };

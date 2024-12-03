@@ -1,3 +1,4 @@
+import Button from '@/components/Button';
 import db from '@/lib/db';
 import getSession from '@/lib/session';
 import { notFound, redirect } from 'next/navigation';
@@ -29,14 +30,21 @@ export default async function Profile() {
     const session = await getSession();
     await session.destroy();
 
-    redirect('/');
+    redirect('/login');
   };
 
   return (
-    <div>
-      <h1>Hello {user?.username || 'unknown'}!</h1>
+    <div className='flex flex-col min-h-screen px-4 py-6 gap-4'>
+      <div className='flex flex-col gap-2 p-4 bg-gray-100 rounded-md'>
+        <h1 className='text-xl font-bold text-blue-500'>{user.username}</h1>
+
+        <p>{user.email}</p>
+
+        {user.bio && <p>{user.bio}</p>}
+      </div>
+
       <form action={logOut}>
-        <button>Logout</button>
+        <Button text='Logout' />
       </form>
     </div>
   );
