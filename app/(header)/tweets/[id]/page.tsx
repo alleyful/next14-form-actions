@@ -1,24 +1,6 @@
 import Input from '@/components/Input';
-import TweetItem from '@/components/TweetItem';
-import db from '@/lib/db';
+import { getTweetById } from '@/service/tweetService';
 import { notFound } from 'next/navigation';
-
-const getTweet = async (id: number) => {
-  const tweet = await db.tweet.findUnique({
-    where: {
-      id
-    },
-    include: {
-      user: {
-        select: {
-          username: true
-        }
-      }
-    }
-  });
-
-  return tweet;
-};
 
 export default async function TweetPage({
   params
@@ -28,13 +10,20 @@ export default async function TweetPage({
   const id = Number(params.id);
   if (isNaN(id)) notFound();
 
-  const tweet = await getTweet(id);
+  const tweet = await getTweetById(id);
   if (!tweet) notFound();
 
   return (
-    <div className='flex flex-col gap-4 min-h-screen p-4'>
-      <TweetItem tweet={tweet} />
-      <Input name='retweet' placeholder='Tweet something...' />
+    <div className='flex flex-col gap-4 p-4'>
+      <div className='mb-2 bg-white rounded-lg p-6'>
+        <h3 className='flex items-center gap-3 border-neutral-500 text-gray-500 pb-2'>
+          {tweet.user.username}
+        </h3>
+
+        <p className=''>{tweet.tweet}</p>
+      </div>
+
+      <Input name='retweet' placeholder='답글 작성' />
     </div>
   );
 }
