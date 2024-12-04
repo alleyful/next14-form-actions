@@ -17,7 +17,7 @@ export default function ListTweet({
   return (
     <Link
       href={`/tweets/${id}`}
-      className='flex flex-col p-10 rounded-2xl bg-white *:text-stone-700 hover:bg-stone-200'
+      className='flex flex-col px-6 py-4 rounded-2xl bg-white *:text-stone-700 hover:bg-stone-200'
     >
       <div className='flex items-center justify-between'>
         <span className='text-lg font-bold'>{user.username}</span>
