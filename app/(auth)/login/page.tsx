@@ -1,51 +1,52 @@
 'use client';
 
 import { useFormState } from 'react-dom';
-import Button from '@/components/Button';
+import { FireIcon, EnvelopeIcon, KeyIcon } from '@heroicons/react/24/solid';
+
+import { handleForm } from './actions';
+
 import Input from '@/components/Input';
-import { logIn } from './actions';
-import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/solid';
+import Button from '@/components/Button';
+import SuccessMessage from '@/components/success-message';
 import Link from 'next/link';
 
-export default function Login() {
-  const [state, dispatch] = useFormState(logIn, null);
+export default function Home() {
+  const [state, action] = useFormState(handleForm, null);
 
   return (
-    <div className='flex flex-col gap-10 py-20 px-6'>
-      <div className='flex gap-2 justify-center font-medium'>
-        <span className='text-9xl'>🔐</span>
-      </div>
-
-      <form action={dispatch} className='flex flex-col gap-3'>
+    <main className='flex flex-col gap-10 items-center justify-center'>
+      <h1 className='text-center text-6xl'>
+        <FireIcon className='size-20 text-red-400' />
+      </h1>
+      <form action={action} className='w-full flex flex-col gap-5'>
         <Input
           name='email'
           type='email'
           placeholder='Email'
-          icon={<EnvelopeIcon className='w-5 h-5 text-gray-400' />}
-          required
-          errors={state?.fieldErrors.email}
+          required={true}
+          errors={state?.error?.fieldErrors.email}
+          labelIcon={<EnvelopeIcon />}
         />
-
         <Input
           name='password'
           type='password'
           placeholder='Password'
-          icon={<LockClosedIcon className='w-5 h-5 text-gray-400' />}
-          required
-          errors={state?.fieldErrors.password}
+          required={true}
+          errors={state?.error?.fieldErrors.password}
+          labelIcon={<KeyIcon />}
         />
-        <Button text='로그인' />
+        <Button text='Log in' />
+        {state?.isSuccess && <SuccessMessage />}
       </form>
-
-      <div className='flex gap-2 justify-center'>
-        <p className='text-sm text-gray-500'>Are you going to sign up?</p>
+      <div className='flex gap-2'>
+        <span>처음이신가요?</span>
         <Link
-          className='text-sm text-blue-500 underline'
           href='/create-account'
+          className='text-stone-600 hover:underline hover:text-stone-400'
         >
-          Sign up
+          Create Account
         </Link>
       </div>
-    </div>
+    </main>
   );
 }

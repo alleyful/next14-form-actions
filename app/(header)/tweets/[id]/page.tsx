@@ -1,5 +1,4 @@
 import Input from '@/components/Input';
-import TweetItem from '@/components/TweetItem';
 import db from '@/lib/db';
 import { notFound } from 'next/navigation';
 
@@ -32,8 +31,13 @@ export default async function TweetPage({
   if (!tweet) notFound();
 
   return (
-    <div className='flex flex-col gap-4 min-h-screen p-4'>
-      <TweetItem tweet={tweet} />
+    <div className='flex flex-col gap-4 p-4'>
+      <div className='pb-36'>
+        <h3 className='p-5 flex items-center gap-3 border-b border-neutral-500'>
+          {tweet.user.username}
+        </h3>
+        <p className='p-5'>{tweet.tweet}</p>
+      </div>
       <Input name='retweet' placeholder='Tweet something...' />
     </div>
   );

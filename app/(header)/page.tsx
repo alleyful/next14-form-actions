@@ -1,32 +1,13 @@
 import db from '@/lib/db';
 import TweetList from '@/components/TweetList';
-
-const getTweets = async () => {
-  const tweets = await db.tweet.findMany({
-    select: {
-      id: true,
-      tweet: true,
-      created_at: true,
-      user: {
-        select: {
-          username: true
-        }
-      }
-    },
-    orderBy: {
-      created_at: 'desc'
-    }
-  });
-
-  return tweets;
-};
+import { getInitialTweets } from '@/service/tweetService';
 
 export default async function Home() {
-  const tweets = await getTweets();
+  const tweets = await getInitialTweets();
 
   return (
-    <div className='flex flex-col items-center justify-between min-h-screen p-4'>
-      <TweetList tweets={tweets} />
+    <div className='flex flex-col min-h-screen p-4'>
+      <TweetList initialTweets={tweets} />
     </div>
   );
 }

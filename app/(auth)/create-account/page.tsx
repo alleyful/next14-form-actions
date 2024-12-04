@@ -4,64 +4,59 @@ import { useFormState } from 'react-dom';
 import { createAccount } from './actions';
 import {
   EnvelopeIcon,
-  LockClosedIcon,
+  FireIcon,
+  KeyIcon,
   UserIcon
 } from '@heroicons/react/24/solid';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
 import Link from 'next/link';
+import SuccessMessage from '@/components/success-message';
 
 export default function CreateAccount() {
-  const [state, dispatch] = useFormState(createAccount, null);
+  const [state, action] = useFormState(createAccount, null);
 
   return (
-    <div className='flex flex-col gap-10 py-20 px-6'>
-      <div className='flex gap-2 justify-center font-medium'>
-        <span className='text-9xl'>😀</span>
-      </div>
-
-      <form action={dispatch} className='flex flex-col gap-3'>
+    <main className='flex flex-col gap-10 items-center justify-center'>
+      <h1 className='text-center text-6xl'>
+        <FireIcon className='size-20 text-red-400' />
+      </h1>
+      <form action={action} className='w-full flex flex-col gap-5'>
         <Input
           name='email'
           type='email'
           placeholder='Email'
-          icon={<EnvelopeIcon className='w-5 h-5 text-gray-400' />}
-          required
-          errors={state?.fieldErrors.email}
+          required={true}
+          errors={state?.error?.fieldErrors.email}
+          labelIcon={<EnvelopeIcon />}
         />
         <Input
           name='username'
-          type='text'
           placeholder='Username'
-          icon={<UserIcon className='w-5 h-5 text-gray-400' />}
-          required
-          errors={state?.fieldErrors.username}
+          required={true}
+          errors={state?.error?.fieldErrors.username}
+          labelIcon={<UserIcon />}
         />
         <Input
           name='password'
           type='password'
           placeholder='Password'
-          icon={<LockClosedIcon className='w-5 h-5 text-gray-400' />}
-          required
-          errors={state?.fieldErrors.password}
+          required={true}
+          errors={state?.error?.fieldErrors.password}
+          labelIcon={<KeyIcon />}
         />
-        <Input
-          name='confirm_password'
-          type='password'
-          placeholder='Confirm Password'
-          icon={<LockClosedIcon className='w-5 h-5 text-gray-400' />}
-          required
-          errors={state?.fieldErrors.confirm_password}
-        />
-        <Button text='회원가입' />
+        <Button text='Create Account' />
+        {state?.isSuccess && <SuccessMessage />}
       </form>
-
-      <div className='flex gap-2 justify-center'>
-        <p className='text-sm text-gray-500'>Do you already have an account?</p>
-        <Link className='text-sm text-blue-500 underline' href='/login'>
-          Login
+      <div className='flex gap-2'>
+        <span>이미 계정이 있나요?</span>
+        <Link
+          href='/log-in'
+          className='text-stone-600 hover:underline hover:text-stone-400'
+        >
+          Log in
         </Link>
       </div>
-    </div>
+    </main>
   );
 }

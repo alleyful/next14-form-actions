@@ -1,6 +1,6 @@
 import Button from '@/components/Button';
 import db from '@/lib/db';
-import getSession from '@/lib/session';
+import { getSession } from '@/lib/session';
 import { notFound, redirect } from 'next/navigation';
 
 async function getUser() {
@@ -34,7 +34,7 @@ export default async function Profile() {
   };
 
   return (
-    <div className='flex flex-col min-h-screen px-4 py-6 gap-4'>
+    <div className='flex flex-col px-4 py-6 gap-4'>
       <div className='flex flex-col gap-2 p-4 bg-gray-100 rounded-md'>
         <h1 className='text-xl font-bold text-blue-500'>{user.username}</h1>
 
