@@ -29,12 +29,7 @@ const createAccountSchema = z
         required_error: 'Email is required.'
       })
       .trim()
-      .email('Please enter a valid email address.')
-      .refine(
-        email => email.includes('@zod.com'),
-        'Only @zod.com email addresses are allowed.'
-      ),
-
+      .email('Please enter a valid email address.'),
     username: z
       .string({
         invalid_type_error: 'Username must be a string.',

@@ -1,6 +1,34 @@
-import Input from '@/components/Input';
+import LikeButton from '@/components/LikeButton';
+import Responses from '@/components/Responses';
+import { getSession } from '@/lib/session';
+import { getLikeStatus } from '@/service/likeService';
+import { getInitialResponse } from '@/service/responseService';
 import { getTweetById } from '@/service/tweetService';
+import { unstable_cache } from 'next/cache';
 import { notFound } from 'next/navigation';
+
+async function getCachedLikeStatus(tweetId: number) {
+  const session = await getSession();
+  const cachedLikeStatus = unstable_cache(
+    getLikeStatus,
+    ['tweet-like-status'],
+    {
+      tags: [`like-status-${tweetId}`]
+    }
+  );
+  return cachedLikeStatus(tweetId, session.id!);
+}
+
+async function getCachedResponses(tweetId: number) {
+  const cachedResponses = unstable_cache(
+    getInitialResponse,
+    ['tweet-responses'],
+    {
+      tags: [`tweet-responses-${tweetId}`]
+    }
+  );
+  return cachedResponses(tweetId);
+}
 
 export default async function TweetPage({
   params
@@ -11,7 +39,9 @@ export default async function TweetPage({
   if (isNaN(id)) notFound();
 
   const tweet = await getTweetById(id);
+  const responses = await getCachedResponses(id);
   if (!tweet) notFound();
+  const { isLiked, likeCount } = await getCachedLikeStatus(id);
 
   return (
     <div className='flex flex-col gap-4 p-4'>
@@ -23,7 +53,14 @@ export default async function TweetPage({
         <p className=''>{tweet.tweet}</p>
       </div>
 
-      <Input name='retweet' placeholder='답글 작성' />
+      <div className='flex flex-col gap-4'>
+        <LikeButton isLiked={isLiked} likeCount={likeCount} tweetId={id} />
+        <Responses
+          initialResponses={responses}
+          tweetId={id}
+          username={tweet.user.username}
+        />
+      </div>
     </div>
   );
 }
