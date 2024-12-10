@@ -3,6 +3,8 @@
 import { useOptimistic, useState } from 'react';
 import { useFormState } from 'react-dom';
 import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/solid';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 import { addTweetResponse, InitialResponses } from '@/service/responseService';
 import Input from './Input';
@@ -17,6 +19,8 @@ export default function Responses({
   tweetId: number;
   username: string;
 }) {
+  const params = useParams();
+
   const [responses, optimisticResponse] = useOptimistic(
     initialResponses,
     (previousResponses, responseOptimisticValue: string) => {
@@ -73,7 +77,18 @@ export default function Responses({
       </form>
       {responses.map(response => (
         <div key={response.id} className='*:text-md flex items-center my-3'>
-          <span className='font-semibold w-3/12'>{response.user.username}</span>
+          {params.username === response.user.username ? (
+            <span className='font-semibold w-3/12'>
+              {response.user.username}
+            </span>
+          ) : (
+            <Link
+              href={`/users/${response.user.username}`}
+              className='font-semibold w-3/12 hover:text-[#3b82f6] transition-colors'
+            >
+              {response.user.username}
+            </Link>
+          )}
           <span> {response.text}</span>
         </div>
       ))}

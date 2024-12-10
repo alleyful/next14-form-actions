@@ -17,3 +17,15 @@ export const isUsernameExist = async (username: string): Promise<boolean> => {
   });
   return Boolean(user);
 };
+
+export async function getUserByUsername(username: string) {
+  return db.user.findUnique({
+    where: { username },
+    select: {
+      id: true,
+      username: true,
+      email: true,
+      bio: true
+    }
+  });
+}

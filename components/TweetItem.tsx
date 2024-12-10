@@ -1,9 +1,11 @@
+'use client';
+
 import Link from 'next/link';
 import { formatToTimeAgo } from '@/lib/utils';
 import { User } from '@prisma/client';
-import { useMemo } from 'react';
+import { useParams } from 'next/navigation';
 
-export default function ListTweet({
+export default function TweetItem({
   tweet,
   created_at,
   id,
@@ -14,18 +16,29 @@ export default function ListTweet({
   id: number;
   user: User;
 }) {
+  const params = useParams();
+  const isCurrentUser = params.username === user.username;
+
   return (
-    <Link
-      href={`/tweets/${id}`}
-      className='flex flex-col px-6 py-4 rounded-2xl bg-white *:text-stone-700 hover:bg-stone-200'
-    >
+    <div className='flex flex-col px-6 py-4 rounded-2xl bg-white *:text-stone-700 hover:bg-stone-200'>
       <div className='flex items-center justify-between'>
-        <span className='text-lg font-bold'>{user.username}</span>
+        {isCurrentUser ? (
+          <span className='text-lg font-bold'>{user.username}</span>
+        ) : (
+          <Link
+            href={`/users/${user.username}`}
+            className='text-lg font-bold hover:text-[#3b82f6] transition-colors'
+          >
+            {user.username}
+          </Link>
+        )}
         <span className='text-sm text-stone-400'>
           {formatToTimeAgo(created_at.toString())}
         </span>
       </div>
-      <p className='text-lg'>{tweet.slice(0, 20)}...</p>
-    </Link>
+      <Link href={`/tweets/${id}`} className='text-lg'>
+        {tweet.slice(0, 20)}...
+      </Link>
+    </div>
   );
 }

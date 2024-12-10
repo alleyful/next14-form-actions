@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { UserIcon } from '@heroicons/react/24/solid';
+import { UserIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 
 export default function Header() {
   const router = useRouter();
@@ -65,6 +65,10 @@ export default function Header() {
               />
             </svg>
           </button>
+
+          <Link href='/search' className='p-2 hover:bg-gray-100 rounded-full'>
+            <MagnifyingGlassIcon className='w-6 h-6 text-gray-500' />
+          </Link>
         </nav>
 
         <div className='flex items-center'>
