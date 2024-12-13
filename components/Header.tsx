@@ -1,83 +1,72 @@
 // components/Header.tsx
 'use client';
 
+import { usePathname, useRouter } from 'next/navigation';
+import { TweetTalkLogo } from './TweetTalkLogo';
+// import { Button } from './common/Button';
+// import { Input } from './common/Input';
+import { useState } from 'react';
+import {
+  ArrowLeftIcon,
+  MagnifyingGlassIcon,
+  UserIcon
+} from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { UserIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import {Button} from './common/Button';
+import {Input }from './common/Input';
 
-export default function Header() {
+export function Header() {
   const router = useRouter();
+  const pathname = usePathname();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const isSearchPage = pathname.startsWith('/search');
+  const isProfilePage = pathname.startsWith('/users');
+
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  }
 
   return (
-    <header className='fixed left-0 top-0 bg-gray-50 border-b px-4 py-2 w-full'>
-      <div className='flex items-center justify-between'>
-        <nav className='flex items-center justify-between'>
-          <button
-            onClick={() => router.back()}
-            className='p-2 hover:bg-gray-100 rounded-full'
-          >
-            <svg
-              className='w-6 h-6 text-gray-500'
-              fill='none'
-              stroke='currentColor'
-              viewBox='0 0 24 24'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                d='M15 19l-7-7 7-7'
-              />
-            </svg>
-          </button>
-
-          <Link href='/' className='p-2 hover:bg-gray-100 rounded-full'>
-            <svg
-              className='w-6 h-6 text-blue-500'
-              fill='none'
-              stroke='currentColor'
-              viewBox='0 0 24 24'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                d='M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
-              />
-            </svg>
-          </Link>
-
-          <button
-            onClick={() => router.forward()}
-            className='p-2 hover:bg-gray-100 rounded-full'
-          >
-            <svg
-              className='w-6 h-6 text-gray-500'
-              fill='none'
-              stroke='currentColor'
-              viewBox='0 0 24 24'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                d='M9 5l7 7-7 7'
-              />
-            </svg>
-          </button>
-
-          <Link href='/search' className='p-2 hover:bg-gray-100 rounded-full'>
-            <MagnifyingGlassIcon className='w-6 h-6 text-gray-500' />
-          </Link>
-        </nav>
-
-        <div className='flex items-center'>
-          <Link href='/profile'>
-            <div className='flex items-center justify-center w-8 h-8 rounded-full bg-blue-500'>
-              <UserIcon className='w-6 h-6 text-white' />
-            </div>
-          </Link>
+    <header className='sticky top-0 z-50 border-b border-gray-800 bg-gray-900 px-4 py-2'>
+      <div className='mx-auto flex max-w-6xl items-center justify-between'>
+        <div className='w-auto'>
+          {isSearchPage || isProfilePage ? (
+            <Button variant='ghost' size='icon' onClick={() => router.back()}>
+              <ArrowLeftIcon className='h-5 w-5' />
+            </Button>
+          ) : (
+            <Link href='/' className='hover:opacity-80 transition-opacity'>
+              <TweetTalkLogo />
+            </Link>
+          )}
         </div>
+
+        <form
+          onSubmit={handleSearch}
+          className='flex w-full max-w-md items-center gap-2 px-4'
+        >
+          <Input
+            type='search'
+            placeholder='검색어를 입력하세요'
+            value={searchQuery}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setSearchQuery(e.target.value)
+            }
+          />
+          <Button type='submit' variant='ghost' size='icon'>
+            <MagnifyingGlassIcon className='h-5 w-5' />
+          </Button>
+        </form>
+
+        <Link href='/profile'>
+          <Button variant='ghost' size='icon'>
+            <UserIcon className='h-5 w-5' />
+          </Button>
+        </Link>
       </div>
     </header>
   );
