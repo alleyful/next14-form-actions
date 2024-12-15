@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { useOptimistic } from 'react';
-import { HandThumbUpIcon } from '@heroicons/react/24/solid';
-import { HandThumbUpIcon as OutlineHandThumbUpIcon } from '@heroicons/react/24/outline';
+import { useOptimistic } from "react";
+import { HandThumbUpIcon } from "@heroicons/react/24/solid";
+import { HandThumbUpIcon as OutlineHandThumbUpIcon } from "@heroicons/react/24/outline";
 
-import { dislikeTweet, likeTweet } from '@/service/likeService';
+import { dislikeTweet, likeTweet } from "@/service/likeService";
 
 export default function LikeButton({
   isLiked,
   likeCount,
-  tweetId
+  tweetId,
 }: {
   isLiked: boolean;
   likeCount: number;
@@ -17,11 +17,11 @@ export default function LikeButton({
 }) {
   const [state, reducer] = useOptimistic(
     { likeCount, isLiked },
-    previousState => ({
+    (previousState) => ({
       likeCount: previousState.isLiked
         ? previousState.likeCount - 1
         : previousState.likeCount + 1,
-      isLiked: !previousState.isLiked
+      isLiked: !previousState.isLiked,
     })
   );
   const handleLikeButton = () => {
@@ -33,24 +33,21 @@ export default function LikeButton({
     }
   };
   return (
-    <form action={handleLikeButton}>
+    <form action={handleLikeButton} className="flex justify-end">
       <button
-        className={`flex items-center gap-2 text-stone-400  text-sm border border-stone-300 rounded-full p-2  transition-colors ${
+        className={`flex items-center gap-2 text-sm text-white rounded-full p-2  transition-colors  ${
           state.isLiked
-            ? 'bg-rose-400 text-white border-rose-400'
-            : 'hover:bg-stone-300'
+            ? "bg-gradient-to-r from-[var(--tt-gradient-start)] via-[var(--tt-gradient-middle)] to-[var(--tt-gradient-end)]"
+            : "hover:bg-stone-300"
         }`}
       >
         {state.isLiked ? (
-          <HandThumbUpIcon className='size-5' />
+          <HandThumbUpIcon className="size-5" />
         ) : (
-          <OutlineHandThumbUpIcon className='size-5' />
+          <OutlineHandThumbUpIcon className="size-5" />
         )}
-        {state.isLiked ? (
-          <span> {state.likeCount}</span>
-        ) : (
-          <span>공감하기 ({state.likeCount})</span>
-        )}
+
+        <span> {state.likeCount}</span>
       </button>
     </form>
   );

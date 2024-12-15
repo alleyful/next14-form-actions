@@ -1,10 +1,10 @@
-import { notFound, redirect } from 'next/navigation';
-import { getUserByUsername } from '@/service/userService';
-import { getSession } from '@/lib/session';
-import EditProfileForm from './EditProfileForm';
+import { notFound, redirect } from "next/navigation";
+import { getUserByUsername } from "@/service/userService";
+import { getSession } from "@/lib/session";
+import EditProfileForm from "./EditProfileForm";
 
 export default async function EditProfile({
-  params: { username }
+  params: { username },
 }: {
   params: { username: string };
 }) {
@@ -17,8 +17,8 @@ export default async function EditProfile({
   }
 
   return (
-    <div className='max-w-2xl mx-auto p-4'>
-      <h1 className='text-2xl font-bold mb-6'>프로필 수정</h1>
+    <div className="max-w-2xl mx-auto p-4">
+      <h1 className="text-xl font-bold mb-6 text-center">프로필 수정</h1>
       <EditProfileForm user={user} />
     </div>
   );
