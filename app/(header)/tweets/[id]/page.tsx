@@ -1,19 +1,20 @@
-import LikeButton from '@/components/LikeButton';
-import Responses from '@/components/Responses';
-import { getSession } from '@/lib/session';
-import { getLikeStatus } from '@/service/likeService';
-import { getInitialResponse } from '@/service/responseService';
-import { getTweetById } from '@/service/tweetService';
-import { unstable_cache } from 'next/cache';
-import { notFound } from 'next/navigation';
+import LikeButton from "@/components/LikeButton";
+import Responses from "@/components/Responses";
+import TweetItem from "@/components/TweetItem";
+import { getSession } from "@/lib/session";
+import { getLikeStatus } from "@/service/likeService";
+import { getInitialResponse } from "@/service/responseService";
+import { getTweetById } from "@/service/tweetService";
+import { unstable_cache } from "next/cache";
+import { notFound } from "next/navigation";
 
 async function getCachedLikeStatus(tweetId: number) {
   const session = await getSession();
   const cachedLikeStatus = unstable_cache(
     getLikeStatus,
-    ['tweet-like-status'],
+    ["tweet-like-status"],
     {
-      tags: [`like-status-${tweetId}`]
+      tags: [`like-status-${tweetId}`],
     }
   );
   return cachedLikeStatus(tweetId, session.id!);
@@ -22,16 +23,16 @@ async function getCachedLikeStatus(tweetId: number) {
 async function getCachedResponses(tweetId: number) {
   const cachedResponses = unstable_cache(
     getInitialResponse,
-    ['tweet-responses'],
+    ["tweet-responses"],
     {
-      tags: [`tweet-responses-${tweetId}`]
+      tags: [`tweet-responses-${tweetId}`],
     }
   );
   return cachedResponses(tweetId);
 }
 
 export default async function TweetPage({
-  params
+  params,
 }: {
   params: { id: string };
 }) {
@@ -43,18 +44,20 @@ export default async function TweetPage({
   if (!tweet) notFound();
   const { isLiked, likeCount } = await getCachedLikeStatus(id);
 
+  console.log(tweet);
+
   return (
-    <div className='flex flex-col gap-4 p-4'>
-      <div className='mb-2 bg-white rounded-lg p-6'>
-        <h3 className='flex items-center gap-3 border-neutral-500 text-gray-500 pb-2'>
-          {tweet.user.username}
-        </h3>
+    <div className="flex flex-col gap-2 p-4 max-w-2xl m-auto">
+      <TweetItem
+        id={tweet.id}
+        tweet={tweet.tweet}
+        created_at={tweet.created_at}
+        user={tweet.user}
+      />
 
-        <p className=''>{tweet.tweet}</p>
-      </div>
-
-      <div className='flex flex-col gap-4'>
+      <div className="flex flex-col gap-8">
         <LikeButton isLiked={isLiked} likeCount={likeCount} tweetId={id} />
+
         <Responses
           initialResponses={responses}
           tweetId={id}

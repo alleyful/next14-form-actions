@@ -32,9 +32,9 @@ export default function TweetList({
         ))}
       </div>
 
-      <div className="w-full flex bottom-32 fixed mx-auto gap-10 items-center justify-center">
+      <div className="w-full flex bottom-32 fixed mx-auto gap-10 items-center justify-center max-w-2xl -ml-4">
         <button
-          className="disabled:text-stone-200"
+          className="disabled:text-stone-500"
           onClick={() => setPage((prev) => (prev === 1 ? prev : prev - 1))}
           disabled={page === 1}
         >
@@ -42,7 +42,7 @@ export default function TweetList({
         </button>
         <span>{page}</span>
         <button
-          className="disabled:text-stone-200"
+          className="disabled:text-stone-500"
           onClick={() => setPage((prev) => (isLastPage ? prev : prev + 1))}
           disabled={isLastPage}
         >
