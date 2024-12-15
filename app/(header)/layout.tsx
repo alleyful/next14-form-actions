@@ -1,10 +1,14 @@
-import Header from '@/components/Header';
+import { Header } from '@/components/Header';
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function HeaderLayout({
+  children
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <section className='flex flex-col'>
+    <>
       <Header />
       {children}
-    </section>
+    </>
   );
 }

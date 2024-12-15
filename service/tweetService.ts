@@ -89,3 +89,35 @@ export const getTweetById = async (id: number) => {
 
   return tweet;
 };
+
+export async function searchTweets(query: string) {
+  if (!query) return [];
+
+  return db.tweet.findMany({
+    where: {
+      tweet: {
+        contains: query
+      }
+    },
+    include: {
+      user: true
+    },
+    orderBy: {
+      created_at: 'desc'
+    }
+  });
+}
+
+export async function getTweetsByUserId(userId: number) {
+  return db.tweet.findMany({
+    where: {
+      userId
+    },
+    include: {
+      user: true
+    },
+    orderBy: {
+      created_at: 'desc'
+    }
+  });
+}
